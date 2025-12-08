@@ -1,3 +1,6 @@
 <Solution>
+  <Project Path="Salam.Inventory.Application/Salam.Inventory.Application.csproj" Id="001a7d96-faeb-4f95-b9ae-cddc0b029fdf" />
+  <Project Path="Salam.Inventory.Domain/Salam.Inventory.Domain.csproj" Id="dd383f08-930f-4848-8536-fd30b82dd1f9" />
+  <Project Path="Salam.Inventory.Infrastructure/Salam.Inventory.Infrastructure.csproj" Id="f7491940-396e-4073-9c64-f7026bf4f068" />
   <Project Path="Salam.Inventory.Web/Salam.Inventory.Web.csproj" Id="a055d970-5683-4daf-8682-54d4a1008daf" />
 </Solution>
