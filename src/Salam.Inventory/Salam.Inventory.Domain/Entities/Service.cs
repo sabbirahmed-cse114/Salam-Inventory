@@ -1,6 +1,4 @@
-﻿
-
-namespace Salam.Inventory.Domain.Entities
+﻿namespace Salam.Inventory.Domain.Entities
 {
     public class Service : IEntity<Guid>
     {
@@ -8,7 +6,7 @@ namespace Salam.Inventory.Domain.Entities
         public string Name { get; set; }
         public double? BuyingPrice { get; set; }
         public double? SellingPrice { get; set; }
-        public string? Description { get; set; }
+        public string? Details { get; set; }
         public Guid? TaxId { get; set; }
         public Tax? Tax { get; set; }
     }

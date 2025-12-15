@@ -1,5 +1,4 @@
-﻿
-namespace Salam.Inventory.Domain.Entities
+﻿namespace Salam.Inventory.Domain.Entities
 {
     public interface ICompositEntity<T>
     {

@@ -1,5 +1,4 @@
-﻿
-namespace Salam.Inventory.Domain.Entities
+﻿namespace Salam.Inventory.Domain.Entities
 {
     public interface IEntity<T> where T : IComparable
     {

@@ -1,6 +1,4 @@
-﻿
-
-namespace Salam.Inventory.Domain.Entities
+﻿namespace Salam.Inventory.Domain.Entities
 {
     public class Warehouse : IEntity<Guid>
     {
