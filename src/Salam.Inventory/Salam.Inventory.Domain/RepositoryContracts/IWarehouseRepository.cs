@@ -5,7 +5,7 @@ namespace Salam.Inventory.Domain.RepositoryContracts
 {
     public interface IWarehouseRepository : IRepositoryBase<Warehouse, Guid>
     {
-        public bool IsTitleDuplicateOrNot(string title, Guid? id = null);
+        public bool IsWarehouseDuplicateOrNot(string title, Guid? id = null);
 
         Task<(IList<Warehouse> data, int total, int totalDisplay)> GetPagedWarehousesAsync(int pageIndex, int pageSize, DataTablesSearch search, string? order);
 

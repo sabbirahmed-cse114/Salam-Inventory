@@ -46,18 +46,18 @@ namespace Salam.Inventory.Domain
 
         public string? FormatSortExpression(params string[] columns)
         {
-            StringBuilder columnBuilder = new StringBuilder();
+            StringBuilder columBuilder = new StringBuilder();
 
             for (int i = 0; i < Order.Length; i++)
             {
-                columnBuilder.Append(columns[Order[i].Column])
+                columBuilder.Append(columns[Order[i].Column])
                 .Append(" ")
                 .Append(Order[i].Dir);
 
                 if (i < Order.Length - 1)
-                    columnBuilder.Append(", ");
+                    columBuilder.Append(", ");
             }
-            var orderedString = columnBuilder.ToString();
+            var orderedString = columBuilder.ToString();
             return orderedString == string.Empty ? null : orderedString;
         }
     }

@@ -2,7 +2,7 @@
 
 namespace Salam.Inventory.Domain.RepositoryContracts
 {
-    public interface ProductWarehouseRepository : ICompositRepositoryBase<ProductWarehouse, Guid>
+    public interface IStockTransferProductRepository : IRepositoryBase<StockTransferProduct, Guid>
     {
     }
 }

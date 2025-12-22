@@ -3,11 +3,11 @@ using Salam.Inventory.Domain.Entities;
 using Salam.Inventory.Domain;
 using Salam.Inventory.Domain.RepositoryContracts;
 
-namespace DevSkill.Inventory.Domain.RepositoryContracts
+namespace Salam.Inventory.Domain.RepositoryContracts
 {
-    public interface ProductRepository : IRepositoryBase<Product, Guid>
+    public interface IProductRepository : IRepositoryBase<Product, Guid>
     {
-        bool IsTitleDuplicateOrNot(string title, Guid? id = null);
+        bool IsProductNameDuplicateOrNot(string title, Guid? id = null);
         //Task<(IList<Product> data, int total, int totalDisplay)> GetPagedProductListAsync(int pageIndex, int pageSize, DataTablesSearch search, string? order);
         Task<(IList<ProductListDto> data, int total, int totalDisplay)> GetPagedProductListAsync(
          int pageIndex, int pageSize, ProductSearchDto search, string? order);

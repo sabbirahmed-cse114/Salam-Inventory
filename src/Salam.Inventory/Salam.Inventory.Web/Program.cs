@@ -1,46 +1,90 @@
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
+using Salam.Inventory.Infrastructure.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Salam.Inventory.Web.Data;
+using Salam.Inventory.Web;
+using System.Reflection;
+using Serilog;
 
-var builder = WebApplication.CreateBuilder(args);
+#region Configure Bootstrap Logger using serilog 
+var config = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json")
+                .Build();
 
-// Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString));
-builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+Log.Logger = new LoggerConfiguration()
+                .ReadFrom.Configuration(config)
+                .CreateBootstrapLogger();
+#endregion
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<ApplicationDbContext>();
-builder.Services.AddControllersWithViews();
 
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+try
 {
-    app.UseMigrationsEndPoint();
+    Log.Information("Application Starting.....");
+
+    var builder = WebApplication.CreateBuilder(args);
+
+    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+
+    var migrationAssembly = Assembly.GetExecutingAssembly().FullName;
+
+    #region Serilog integration for Application logs
+    builder.Host.UseSerilog((services, ls) => ls
+                .Enrich.FromLogContext()
+                .ReadFrom.Configuration(builder.Configuration));
+    #endregion
+
+
+    builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+    builder.Services.AddIdentity();
+    builder.Services.AddControllersWithViews();
+
+    #region Autofac Configuration For Dependency Injection
+    builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory(
+        containerBuilder =>
+        {
+            containerBuilder.RegisterModule(new WebModule(connectionString, migrationAssembly));
+        }));
+    #endregion
+
+    #region AutoMapper Configuration
+    builder.Services.AddAutoMapper(typeof(WebProfile).Assembly);
+    #endregion
+
+    var app = builder.Build();
+    if (app.Environment.IsDevelopment())
+    {
+        app.UseMigrationsEndPoint();
+    }
+    else
+    {
+        app.UseExceptionHandler("/Home/Error");
+        app.UseHsts();
+    }
+
+    app.UseHttpsRedirection();
+    app.UseRouting();
+
+    app.UseAuthorization();
+
+    app.MapStaticAssets();
+
+    app.MapControllerRoute(
+        name: "default",
+        pattern: "{controller=Home}/{action=Index}/{id?}")
+        .WithStaticAssets();
+
+    app.MapRazorPages()
+        .WithStaticAssets();
+
+    app.Run();
 }
-else
+catch (Exception ex)
 {
-    app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
+    Log.Fatal(ex, "Fatal Error occurred while starting the application...");
 }
-
-app.UseHttpsRedirection();
-app.UseRouting();
-
-app.UseAuthorization();
-
-app.MapStaticAssets();
-
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}")
-    .WithStaticAssets();
-
-app.MapRazorPages()
-   .WithStaticAssets();
-
-app.Run();
+finally
+{
+    Log.CloseAndFlush();
+}

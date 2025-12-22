@@ -23,7 +23,7 @@ namespace Salam.Inventory.Domain.RepositoryContracts
         Task<int> GetCountAsync(Expression<Func<TEntity, bool>> filter = null);        
         Task RemoveAsync(Expression<Func<TEntity, bool>> filter);
         Task RemoveAsync(TEntity entityToDelete);
-        Task RemoveRangeAsync(IList<TEntity> entitiesToDelete);
+        Task RemoveRange_Async(IList<TEntity> entitiesToDelete);
         Task RemoveAsync(TKey id);
     }
 }
